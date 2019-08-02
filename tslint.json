@@ -1,0 +1,25 @@
+{
+  "extends": "tslint-config-airbnb",
+  "rules": {
+    "align": false,
+    "trailing-comma": true,
+    "strict-boolean-expressions": false,
+    "no-boolean-literal-compare": false,
+    "max-line-length": false,
+    "brace-style": false,
+    "import-name": false,
+    "prefer-template": false,
+    "no-increment-decrement": false,
+    "indent": [
+      true,
+      "spaces",
+      2
+    ],
+    "variable-name": [
+      true,
+      "check-format",
+      "allow-pascal-case",
+      "allow-leading-underscore"
+    ]
+  }
+}

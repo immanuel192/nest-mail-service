@@ -1,0 +1,22 @@
+{
+  "roots": [
+    "<rootDir>/test"
+  ],
+  "transform": {
+    "^.+\\.ts$": "ts-jest"
+  },
+  "testRegex": ".e2e-spec.ts$",
+  "testPathIgnorePatterns": [
+    "/node_modules/"
+  ],
+  "coveragePathIgnorePatterns": [
+    "/node_modules/"
+  ],
+  "collectCoverageFrom": [
+    "<rootDir>/src/**/*.ts",
+    "<rootDir>/test/**/*.ts",
+    "!<rootDir>/src/**/*.d.ts",
+    "!**/node_modules/**"
+  ],
+  "testEnvironment": "node"
+}

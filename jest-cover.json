@@ -1,0 +1,26 @@
+{
+  "roots": [
+    "<rootDir>/test",
+    "<rootDir>/src"
+  ],
+  "transform": {
+    "^.+\\.ts$": "ts-jest"
+  },
+  "testRegex": ".(e2e-spec|spec).ts$",
+  "testPathIgnorePatterns": [
+    "/node_modules/"
+  ],
+  "coveragePathIgnorePatterns": [
+    "/node_modules/",
+    "app.ts",
+    "test-helper.ts",
+    "middlewares"
+  ],
+  "collectCoverageFrom": [
+    "<rootDir>/src/**/*.ts",
+    "<rootDir>/test/**/*.ts",
+    "!<rootDir>/src/**/*.d.ts",
+    "!**/node_modules/**"
+  ],
+  "testEnvironment": "node"
+}

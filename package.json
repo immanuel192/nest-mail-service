@@ -1,0 +1,127 @@
+{
+  "name": "nest-mail-service",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "dependencies": {
+    "@nestjs/common": "6.5.3",
+    "@nestjs/core": "6.5.3",
+    "@nestjs/platform-express": "6.5.3",
+    "@nestjs/swagger": "3.1.0",
+    "class-transformer": "0.2.3",
+    "class-validator": "0.9.1",
+    "compression": "1.7.4",
+    "config": "3.1.0",
+    "helmet": "3.18.0",
+    "lodash": "4.17.15",
+    "morgan": "1.9.1",
+    "nodemon": "1.19.1",
+    "reflect-metadata": "0.1.13",
+    "response-time": "2.3.2",
+    "rxjs": "6.5.2",
+    "swagger-ui-express": "4.0.7",
+    "tslib": "1.10.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "8.1.0",
+    "@commitlint/config-conventional": "8.0.0",
+    "@nestjs/testing": "6.5.3",
+    "@semantic-release/changelog": "3.0.4",
+    "@semantic-release/git": "7.0.16",
+    "@types/compression": "0.0.36",
+    "@types/jest": "23.3.1",
+    "@types/jest-when": "2.4.1",
+    "@types/lodash": "4.14.136",
+    "@types/morgan": "1.7.35",
+    "@types/response-time": "2.3.3",
+    "@types/supertest": "2.0.7",
+    "conventional-changelog-angular": "5.0.3",
+    "coveralls": "3.0.4",
+    "husky": "1.3.1",
+    "jest": "24.7.1",
+    "jest-when": "2.6.0",
+    "lint-staged": "8.1.5",
+    "semantic-release": "15.13.19",
+    "supertest": "4.0.2",
+    "ts-jest": "24.0.1",
+    "ts-node": "8.0.2",
+    "tslint": "5.16.0",
+    "tslint-config-airbnb": "5.11.1",
+    "tsutils": "3.14.0",
+    "typescript": "3.5.2"
+  },
+  "scripts": {
+    "lint": "tslint --exclude '**/*.d.ts' src/**/*.ts",
+    "lint:verify:build": "tsc -p tsconfig-prod.json --noEmit",
+    "dist:tsc": "tsc -p tsconfig-prod.json && cp -r src/conf dist",
+    "dist:prepare": "rm -rf node_modules && npm install --production",
+    "dist:build": "npm run dist:tsc && npm run dist:prepare",
+    "dist": "npm run dist:build && npm run dist:artifact",
+    "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",
+    "cover": "NODE_ENV=test jest --config ./jest-cover.json  --coverage --bail --forceExit",
+    "test": "npm run lint && NODE_ENV=test jest",
+    "test:e2e": "jest --config ./jest-e2e.json --forceExit --bail",
+    "test:watch": "NODE_ENV=test jest --watch",
+    "prestart": "docker-compose up -d",
+    "start": "nodemon dist/app.js",
+    "start:local": "NODE_ENV=local ts-node -T src/app.ts",
+    "start:local:watch": "NODE_ENV=local nodemon --watch src -e ts --exec \"ts-node\" -T src/app.ts",
+    "release": "semantic-release --no-ci"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/immanuel192/nest-mail-service.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/immanuel192/nest-mail-service/issues"
+  },
+  "homepage": "https://github.com/immanuel192/nest-mail-service#readme",
+  "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "testRegex": ".spec.ts$",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*.ts",
+      "!<rootDir>/src/**/*.d.ts",
+      "!**/node_modules/**"
+    ],
+    "testEnvironment": "node"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "header-max-length": [
+        2,
+        "always",
+        100
+      ]
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "tslint --exclude '**/*.d.ts' src/**/*.ts --fix",
+      "git add"
+    ]
+  }
+}

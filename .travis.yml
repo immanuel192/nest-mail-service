@@ -1,0 +1,41 @@
+language: node_js
+node_js:
+- 10.12.0
+sudo: required
+dist: trusty
+branches:
+  only:
+  - master
+  - "/^feature.*$/"
+  - "/^v[0-9].*$/"
+git:
+  depth: false
+
+cache:
+  bundler: true
+  directories:
+  - node_modules
+
+before_install:
+- chmod +x scripts/*
+
+jobs:
+  include:
+  - stage: test
+    name: Unit test & Integration test
+    script:
+    - npm run cover
+    - npm run lint:verify:build
+    - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+  - stage: deploy
+    if: "(branch = master) OR (tag =~ ^v[0-9].*$)"
+    name: Deploy
+    script:
+    - scripts/deploy.sh
+notifications:
+  email:
+    recipients:
+    - trungdt@absoft.vn
+env:
+  matrix:
+  - NODE_ENV=test
