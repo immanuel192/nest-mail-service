@@ -4,6 +4,7 @@ RUN mkdir -p /var/app/current/src
 WORKDIR /var/app/current
 COPY *.json /var/app/current/
 COPY src/. /var/app/current/src/
+RUN rm /var/app/current/src/conf/local.json
 RUN npm install
 RUN npm run dist:build
 RUN rm -rf /var/app/current/src

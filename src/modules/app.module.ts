@@ -17,7 +17,6 @@ import { createMongoDbIndexes } from '../commons/mongoIndexes';
   ]
 })
 export class AppModule implements NestModule, OnModuleInit {
-
   constructor(
     private readonly database: IDatabaseInstance
   ) { }

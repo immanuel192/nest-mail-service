@@ -5,5 +5,10 @@
     "password": "",
     "database": "mails-test",
     "replicaSet": ""
+  },
+  "redis": {
+    "host": "localhost",
+    "port": "6379",
+    "db": 1
   }
 }

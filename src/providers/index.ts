@@ -3,3 +3,4 @@ export * from './error.filter.provider';
 export * from './global.validation.provider';
 export * from './logger.provider';
 export * from './database.provider';
+export * from './redis.provider';

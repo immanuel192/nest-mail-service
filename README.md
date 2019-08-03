@@ -24,7 +24,7 @@ How system works:
   - Attempt to send email
   - If success, delete message from the queue
   - If fail, update message status together with the visibility to let it available again in the queue for next time retry
-  - In case if can not retry at all, dispatch a message to `DeadLetter` queue and mark the email document as `Failed`
+  - In case if can not retry at all after a configured number of retries, it will dispatch a message to `DeadLetter` queue for analysis and mark the email document as `Failed`
 - `Worker` will:
   - Run every 1 hour
   - Try to scan any email documents that need to be enqueue again. This will be backup solution in case API did not dispatch message successfully.
@@ -55,6 +55,25 @@ npm run test # to run unit test
 npm run test:e2e  # to run integration test
 npm run test:watch # to test app and keep watching files change
 npm run cover # to get code coverage
+```
+
+- To start develop new feature, you can create your own config `local.json` file as below. Remember to run `docker-compose up -d` first to init mongo and redis container
+```json
+{
+  "mongodb": {
+    "host": "localhost:27020",
+    "user": "",
+    "password": "",
+    "database": "mails",
+    "replicaSet": ""
+  },
+  "redis": {
+    "host": "localhost",
+    "port": "6380",
+    "db": 2
+  }
+}
+
 ```
 
 ### Using docker

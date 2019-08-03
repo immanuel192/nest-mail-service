@@ -1,9 +1,14 @@
 {
   "mongodb": {
-    "host": "localhost:27017",
+    "host": "mongo:27017",
     "user": "",
     "password": "",
     "database": "mails",
     "replicaSet": ""
+  },
+  "redis": {
+    "host": "redis",
+    "port": "6379",
+    "db": 1
   }
 }

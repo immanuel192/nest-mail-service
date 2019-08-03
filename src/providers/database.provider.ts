@@ -10,11 +10,11 @@ const configName = 'mongodb';
 
 @Injectable()
 export class Database implements IDatabaseInstance {
-  private mongoClient: mongodb.MongoClient = null;
-  private database: mongodb.Db = null;
-  private connectionString: string = '';
-  private dbName: string = '';
-  private authSource: string;
+  protected mongoClient: mongodb.MongoClient = null;
+  protected database: mongodb.Db = null;
+  protected connectionString: string = '';
+  protected dbName: string = '';
+  protected authSource: string;
 
   static get [IOC_KEY](): ClassProvider {
     return {
@@ -64,8 +64,8 @@ export class Database implements IDatabaseInstance {
 
   close() {
     if (this.mongoClient) {
-      this.database = null;
       this.mongoClient.close();
     }
+    this.database = null;
   }
 }
