@@ -3,7 +3,7 @@
     "host": "localhost:27017",
     "user": "",
     "password": "",
-    "database": "mails",
+    "database": "mails-test",
     "replicaSet": ""
   },
   "redis": {

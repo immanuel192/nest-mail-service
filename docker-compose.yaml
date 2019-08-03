@@ -6,8 +6,31 @@ services:
     build: .
     ports:
       - "9001:9000"
+    links:
+      - mongo
+      - redis
     networks: 
       - backend
+  
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27020:27017"
+    networks: 
+      - backend
+    environment:
+      - MONGODB_DATABASE=mails
+
+  redis:
+    image: "bitnami/redis"
+    container_name: redis
+    ports:
+      - "6380:6379"
+    networks: 
+      - backend
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
 
 networks: 
   backend:

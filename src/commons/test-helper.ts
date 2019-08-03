@@ -28,3 +28,25 @@ export const NoopLogger = {
   debug(_message: any, _context?: string) { },
   verbose(_message: any, _context?: string) { },
 };
+
+export const loggerMock = () => {
+  return {
+    error: jest.fn(),
+    log: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
+    verbose: jest.fn(),
+  };
+};
+
+export const configMock = () => {
+  return {
+    get: jest.fn()
+  };
+};
+
+export const collectionMock = () => {
+  return {
+
+  };
+};
