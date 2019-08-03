@@ -1,9 +1,0 @@
-{
-  "mongodb": {
-    "host": "localhost:27020",
-    "user": "",
-    "password": "",
-    "database": "mails",
-    "replicaSet": ""
-  }
-}
