@@ -6,8 +6,19 @@ services:
     build: .
     ports:
       - "9001:9000"
+    links:
+      - mongo
     networks: 
       - backend
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27020:27017"
+    networks: 
+      - backend
+    environment:
+      - MONGODB_DATABASE=mails
 
 networks: 
   backend:

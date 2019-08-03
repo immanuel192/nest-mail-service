@@ -1,6 +1,6 @@
 {
   "mongodb": {
-    "host": "localhost:27020",
+    "host": "localhost:27017",
     "user": "",
     "password": "",
     "database": "mails-test",

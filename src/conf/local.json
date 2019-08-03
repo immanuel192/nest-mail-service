@@ -3,7 +3,7 @@
     "host": "localhost:27020",
     "user": "",
     "password": "",
-    "database": "mails-test",
+    "database": "mails",
     "replicaSet": ""
   }
 }

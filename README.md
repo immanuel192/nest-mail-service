@@ -48,11 +48,11 @@ We use `semantic-release` to generate release notes. This make use of [conventio
 - Available tasks
 ```sh
 npm install
-npm run start  # run docker compose to start the app
-npm run start:local # to start app in your local machine
+docker-compose up -d  # to start the app by docker, including mongodb container
+npm run start:local # to start app in your local machine, that will connect to docker mongodb container
 npm run start:local:watch # to start app and watch for any changes
 npm run test # to run unit test
-NODE_ENV=test npm run test:e2e  # to run integration test
+npm run test:e2e  # to run integration test
 npm run test:watch # to test app and keep watching files change
 npm run cover # to get code coverage
 ```

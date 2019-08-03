@@ -1,4 +1,5 @@
 export * from './ITMap';
+import { Collection, Db } from 'mongodb';
 
 /**
  * Configuration interface
@@ -17,4 +18,28 @@ export type ILoggerInstance = {
   verbose(message: any, context?: string): void;
 };
 
-export interface IDatabaseInstance { }
+export interface DbConnectionOptions {
+  host: string;
+  user: string;
+  password?: string;
+  database: string;
+  replicaSet?: string;
+  authSource?: string;
+}
+
+export abstract class IDatabaseInstance {
+  /**
+   * Open connection
+   * @param options
+   */
+  abstract open(options?: any): Promise<Db>;
+  /**
+   * Get collection instance
+   * @param name
+   */
+  abstract collection<T = any>(name: string): Promise<Collection<T>>;
+  /**
+   * Close all connections
+   */
+  abstract close(): void;
+}

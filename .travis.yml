@@ -3,6 +3,10 @@ node_js:
 - 10.12.0
 sudo: required
 dist: trusty
+services:
+  - mongodb
+  - redis-server
+  - mysql
 branches:
   only:
   - master
@@ -24,7 +28,7 @@ jobs:
   - stage: test
     name: Unit test & Integration test
     script:
-    - npm run cover
+    - npm run cover:travis
     - npm run lint:verify:build
     - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
   - stage: deploy
