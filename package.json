@@ -63,7 +63,7 @@
     "dist:tsc": "tsc -p tsconfig-prod.json && cp -r src/conf dist",
     "dist:prepare": "rm -rf node_modules && npm install --production",
     "dist:build": "npm run dist:tsc && npm run dist:prepare",
-    "dist": "npm run dist:build && npm run dist:artifact",
+    "dist": "npm run dist:build",
     "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",
     "cover": "NODE_ENV=test jest --config ./jest-cover.json  --coverage --bail --forceExit",
     "cover:travis": "NODE_ENV=travis jest --config ./jest-cover.json  --coverage --bail --forceExit",

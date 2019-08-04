@@ -47,6 +47,7 @@ export const configMock = () => {
 
 export const collectionMock = () => {
   return {
-
+    insertOne: jest.fn(),
+    findOne: jest.fn()
   };
 };
