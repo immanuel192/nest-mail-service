@@ -1,1 +1,1 @@
-export { };
+export * from './mail.service.interface';

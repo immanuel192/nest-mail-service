@@ -1,21 +1,6 @@
 import { ObjectId } from 'mongodb';
-export * from './mail.controller.dto';
 
-/**
- * Insert mail info dto
- */
-export interface InsertMailInfoDto {
-  title: string;
-  content: string;
-  to: string[];
-  cc?: string[];
-  bcc?: string[];
-}
-
-/**
- * An email dto
- */
-export interface MailDto {
+export interface MailModel {
   _id?: ObjectId;
   to: string[];
   cc: string[];

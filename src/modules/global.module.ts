@@ -1,7 +1,7 @@
 import { Global, Module, DynamicModule } from '@nestjs/common';
 import HealthController from '../controllers/health.controller';
 import {
-  providerLogger, providerConfig, Database, providerRedis
+  providerLogger, providerConfig, Database, providerRedis, providerGlobalValidation, providerErrorFilter
 } from '../providers';
 import { IOC_KEY } from '../commons';
 
@@ -15,6 +15,8 @@ export class GlobalModule {
         HealthController
       ],
       providers: [
+        providerGlobalValidation,
+        providerErrorFilter,
         providerConfig,
         providerLogger,
         Database[IOC_KEY],
@@ -24,7 +26,7 @@ export class GlobalModule {
         providerConfig,
         providerLogger,
         Database[IOC_KEY],
-        providerRedis
+        providerRedis,
       ]
     };
   }

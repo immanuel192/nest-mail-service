@@ -1,19 +1,14 @@
 import { Module, NestModule, MiddlewareConsumer, OnModuleInit } from '@nestjs/common';
 import { GlobalModule } from './global.module';
 import { MwGracefulShutdown, MwRequestLogger } from '../middlewares';
-import { providerErrorFilter, providerGlobalValidation } from '../providers';
 import { IDatabaseInstance } from '../commons';
 import { createMongoDbIndexes } from '../commons/mongoIndexes';
+import { MailModule } from './mail.module';
 
 @Module({
   imports: [
-    GlobalModule.forRoot()
-  ],
-  controllers: [
-  ],
-  providers: [
-    providerErrorFilter,
-    providerGlobalValidation
+    GlobalModule.forRoot(),
+    MailModule
   ]
 })
 export class AppModule implements NestModule, OnModuleInit {

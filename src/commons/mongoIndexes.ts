@@ -6,7 +6,7 @@ export function createMongoDbIndexes(db: IDatabaseInstance) {
       return collection.createIndexes([
         {
           key: {
-            test: 1 // need to update field later
+            'status.type': 1
           },
           background: true
         }

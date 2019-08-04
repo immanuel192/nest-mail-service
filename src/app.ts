@@ -31,10 +31,9 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle('nest-mail-service')
     .setDescription('nest-mail-service api')
-    .addBearerAuth('Authorization', 'header', 'basic')
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(process.env.NODE_PORT || 9000);
 }
