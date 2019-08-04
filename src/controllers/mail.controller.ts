@@ -1,13 +1,18 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Inject } from '@nestjs/common';
 import { ApiUseTags, ApiCreatedResponse, ApiBadRequestResponse, ApiOperation, ApiInternalServerErrorResponse } from '@nestjs/swagger';
-import { IMailService } from '../services';
+import { IMailService, IQueue } from '../services';
 import { SendMailRequestDto, SendMailResponseDto } from '../dto';
+import { QUEUES, ILoggerInstance, PROVIDERS } from '../commons';
 
 @ApiUseTags('email')
 @Controller('/api/emails')
 export default class MailController {
   constructor(
-    private readonly mailService: IMailService
+    @Inject(QUEUES.MAIN)
+    private readonly mainQueue: IQueue,
+    @Inject(PROVIDERS.ROOT_LOGGER)
+    private readonly logger: ILoggerInstance,
+    private readonly mailService: IMailService,
   ) { }
 
   @Post('')
@@ -18,13 +23,20 @@ export default class MailController {
   })
   @ApiBadRequestResponse({})
   @ApiInternalServerErrorResponse({})
-  create(
+  async create(
     @Body()
     inp: SendMailRequestDto,
   ) {
-    return this.mailService.insert({ ...inp })
-      .then(newMailInfo => ({
-        data: { id: newMailInfo._id.toHexString() }
-      }));
+    const newMailInfo = await this.mailService.insert({ ...inp });
+    const newMailId = newMailInfo._id.toHexString();
+    try {
+      await this.mainQueue.send(newMailId);
+    }
+    catch (e) {
+      this.logger.error('Can not dispatch new mail sending to main queue', e.stack || null);
+    }
+    return {
+      data: { id: newMailId }
+    };
   }
 }

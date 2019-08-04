@@ -51,3 +51,12 @@ export const collectionMock = () => {
     findOne: jest.fn()
   };
 };
+
+export const queueMock = () => {
+  return {
+    receive: jest.fn(),
+    delete: jest.fn(),
+    updateVisibility: jest.fn(),
+    send: jest.fn()
+  };
+};

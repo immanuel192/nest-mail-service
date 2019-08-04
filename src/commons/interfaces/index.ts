@@ -1,5 +1,4 @@
 export * from './ITMap';
-export * from './queue.base.interface';
 import { Collection, Db } from 'mongodb';
 
 /**

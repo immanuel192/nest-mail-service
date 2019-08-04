@@ -1,8 +1,8 @@
 import * as RSMQ from 'rsmq';
 import { OnModuleInit } from '@nestjs/common';
 import { IConfiguration, ILoggerInstance } from '../../commons';
-import { IQueue } from '../../commons/interfaces';
 import { QueueMessageDto } from '../../dto';
+import { IQueue } from './queue.base.interface';
 
 /**
  * Base queue
@@ -25,9 +25,12 @@ export abstract class QueueBase implements IQueue, OnModuleInit {
       realtime: false,
       db: redisConfig.db
     } as any);
-    const result = await this.connection.createQueueAsync({ qname: this.queueName });
-    if (result !== 1) {
-      throw new Error(`Creating queue ${this.queueName} unsuccessful`);
+    const queues = await this.connection.listQueuesAsync();
+    if (!queues.includes(this.queueName)) {
+      const result = await this.connection.createQueueAsync({ qname: this.queueName });
+      if (result !== 1) {
+        throw new Error(`Creating queue ${this.queueName} unsuccessful`);
+      }
     }
   }
 
