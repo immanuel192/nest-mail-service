@@ -33,7 +33,7 @@ export default class MailController {
       await this.mainQueue.send(newMailId);
     }
     catch (e) {
-      this.logger.error('Can not dispatch new mail sending to main queue', e.stack || null);
+      this.logger.error('Can not dispatch new mail sending to main queue', e.stack);
     }
     return {
       data: { id: newMailId }
