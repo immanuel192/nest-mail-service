@@ -18,3 +18,8 @@ export enum EMailSendingStatus {
   /** Can not send email after configured retries */
   Fail = 'Fail'
 }
+
+export const QUEUES = {
+  MAIN: 'main',
+  DEADLETTER: 'dead'
+};

@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb';
 export * from './mail.controller.dto';
+export * from './queue.dto';
 
 /**
  * Insert mail info dto
