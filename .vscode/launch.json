@@ -20,7 +20,7 @@
       "protocol": "auto",
       "internalConsoleOptions": "openOnSessionStart",
       "env": {
-        "NODE_ENV": "travis",
+        "NODE_ENV": "mylocal",
         "NODE_PORT": "9000"
       },
       "sourceMaps": true,

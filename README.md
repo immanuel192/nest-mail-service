@@ -57,7 +57,7 @@ npm run test:watch # to test app and keep watching files change
 npm run cover # to get code coverage
 ```
 
-- To start develop new feature, you can create your own config `local.json` file as below. Remember to run `docker-compose up -d` first to init mongo and redis container
+- To start develop new feature, you can create your own config `mylocal.json` file as below. Remember to run `docker-compose up -d` first to init mongo and redis container
 ```json
 {
   "mongodb": {
