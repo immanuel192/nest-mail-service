@@ -31,6 +31,7 @@ export abstract class QueueBase implements IQueue, OnModuleInit {
       if (result !== 1) {
         throw new Error(`Creating queue ${this.queueName} unsuccessful`);
       }
+      this.logger.debug(`Created queue ${this.queueName}`);
     }
   }
 
