@@ -13,7 +13,7 @@ import { IQueue } from '../queue/queue.base.interface';
 @Injectable()
 export class MailRecoverJob extends JobAbstract {
   protected jobName = JOB_IDS.MAIL_RECOVERY;
-  private bufferTime: number = 1800;
+  protected bufferTime: number = 1800;
 
   constructor(
     private readonly mailService: IMailService,
@@ -29,25 +29,22 @@ export class MailRecoverJob extends JobAbstract {
   }
 
   async execute() {
-    debugger;
-    this.logger.warn(`${this.jobName}: Starting job`);
+    this.logger.debug(`${this.jobName}: Starting job`);
     let pendingMails: MailDto[] = [];
     let processedCount: number = 0;
-    let firstId: string = '';
+    let firstId: string = null;
     const fetchQuery = {
       fromId: null as any,
       limit: 100,
       bufferTime: this.bufferTime
     };
     do {
-      pendingMails = await this.mailService.fetchPendingMails(fetchQuery);
+      pendingMails = await this.mailService.fetchPendingMails({ ...fetchQuery });
       if (pendingMails.length === 0) {
         break;
       }
       processedCount += pendingMails.length;
-      if (!firstId) {
-        firstId = pendingMails[0]._id.toHexString();
-      }
+      firstId = firstId || pendingMails[0]._id.toHexString();
 
       fetchQuery.fromId = pendingMails[pendingMails.length - 1]._id;
       this.logger.debug(`Fetched ${pendingMails.length} pending mails`);
@@ -56,6 +53,6 @@ export class MailRecoverJob extends JobAbstract {
       await Bluebird.map(pendingMails, mail => this.mainQueue.send(mail._id.toHexString()), { concurrency: 5 });
     } while (pendingMails.length > 0);
 
-    this.logger.warn(`${this.jobName}: Finished. Processed ${processedCount} pending mails, started from ${firstId}`);
+    this.logger.debug(`${this.jobName}: Finished. Processed ${processedCount} pending mails, started from ${firstId}`);
   }
 }
