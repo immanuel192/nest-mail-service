@@ -22,7 +22,6 @@ export abstract class QueueBase implements IQueueProducer, IQueueConsumer, OnMod
   ) { }
 
   async onModuleInit() {
-    debugger;
     this.logger.debug(`Init queue ${this.queueName}`);
     const redisConfig = this.configService.get('redis');
     this.connection = new RSMQ({

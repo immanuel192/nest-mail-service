@@ -14,11 +14,9 @@ export class MailSendingWorker extends QueueConsumerBase {
     super(mainQueueConsumer, QUEUES.MAIN);
   }
 
-  onMesage(message: QueueMessageDto): Promise<EMailInQueueProcessingStatus> {
-    console.log(message);
+  onMesage(_message: QueueMessageDto): Promise<EMailInQueueProcessingStatus> {
     return Bluebird.resolve()
-      .delay(10000)
+      .delay(3000)
       .then(() => EMailInQueueProcessingStatus.Success) as any;
   }
-
 }

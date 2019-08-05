@@ -1,7 +1,10 @@
+import * as Bluebird from 'bluebird';
 import { OnModuleInit, Inject, OnModuleDestroy } from '@nestjs/common';
 import { Redis } from 'ioredis';
+import { Subject, timer, Observable } from 'rxjs';
+import { bufferTime } from 'rxjs/operators';
 import { IQueueConsumer } from './queue.base.interface';
-import { IConfiguration, ILoggerInstance, PROVIDERS, QUEUE_NAMESPACE, EMailInQueueProcessingStatus, QUEUE_RETRY_CHECK } from '../../commons';
+import { IConfiguration, ILoggerInstance, PROVIDERS, QUEUE_NAMESPACE, EMailInQueueProcessingStatus, QUEUE_RETRY_CHECK, QUEUE_MAXIDLE, QUEUE_MAXFETCH } from '../../commons';
 import { newRedisConnection } from '../../providers/redis.provider';
 import { QueueMessageDto } from '../../dto';
 
@@ -13,8 +16,6 @@ export abstract class QueueConsumerBase implements OnModuleInit, OnModuleDestroy
   protected readonly logger: ILoggerInstance;
   @Inject(IConfiguration)
   protected readonly configService: IConfiguration;
-  @Inject(PROVIDERS.REDIS)
-  protected readonly redis: Redis;
 
   /**
    * Subcribe redis client, for realtime listen to the PUBLISH command
@@ -24,8 +25,31 @@ export abstract class QueueConsumerBase implements OnModuleInit, OnModuleDestroy
    * @memberof QueueConsumerBase
    */
   protected subcribeRedis: Redis;
+  /**
+   * Redis channel name
+   *
+   * @protected
+   * @type {string}
+   * @memberof QueueConsumerBase
+   */
   protected channelName: string;
-  protected MAX_CONCURRENT = 3;
+  /**
+   * Internal observable, to continuously
+   *
+   * @protected
+   * @type {Subject<any>}
+   * @memberof QueueConsumerBase
+   */
+  private rxObservableBuffer: Subject<any>;
+  private rxObservableTicker: Observable<number>;
+  /**
+   * Last time (in number) we process a message. To make sure that we dont miss any message in the queue
+   *
+   * @private
+   * @type {number}
+   * @memberof QueueConsumerBase
+   */
+  private lastProcessOn: number = Date.now();
 
   constructor(
     protected readonly queue: IQueueConsumer,
@@ -39,40 +63,69 @@ export abstract class QueueConsumerBase implements OnModuleInit, OnModuleDestroy
    */
   abstract onMesage(message: QueueMessageDto): Promise<EMailInQueueProcessingStatus>;
 
-  private async getTotalConcurrent() {
-    const keys = await this.redis.keys(`${this.queueName}:*`);
-    return keys.length;
+  async onModuleInit() {
+    this.subcribeRedis = await newRedisConnection(this.configService, this.logger, this.queueName);
+    await this.subscribeRedis();
+    await this.initRx();
   }
 
-  private incTotalConcurrent() {
-    const key = `${this.queueName}:${Math.random()}`;
-    return this.redis.multi()
-      .set(key, 1)
-      .expire(key, 20)
-      .exec();
+  onModuleDestroy() {
+    this.subcribeRedis.quit();
+    this.rxObservableBuffer.complete();
   }
 
-  private async decTotalConcurrent() {
-    const keys = await this.redis.keys(`${this.queueName}:*`);
-    const key = keys[0];
-    await this.redis.del(key);
+  private initRx() {
+    /**
+     * I use observable in Rxjs to try prevent backpressure
+     */
+    this.rxObservableBuffer = new Subject();
+    this.rxObservableBuffer
+      .pipe(bufferTime(50))
+      .subscribe(args => Bluebird.map([...args], m => this.attempProcessMessage(m), { concurrency: 5 }));
+
+    // In case that we miss anything, actively to pull data from the queue
+    this.rxObservableTicker = timer(2000, 5000);
+    this.rxObservableTicker.subscribe(() => {
+      if (Date.now() - this.lastProcessOn > QUEUE_MAXIDLE) {
+        return this.tryFetchOnIdle();
+      }
+      return null;
+    });
+  }
+
+  private subscribeRedis() {
+    this.channelName = `${QUEUE_NAMESPACE}:rt:${this.queueName}`;
+    this.subcribeRedis.subscribe(this.channelName);
+    this.subcribeRedis.on('message', (channel: string) => {
+      if (channel === this.channelName) {
+        // trigger our internal event to fetch message from queue
+        this.rxObservableBuffer.next();
+      }
+    });
   }
 
   /**
-   * @todo Try to implement the queue exceed
+   * Try to fetch at most QUEUE_MAXFETCH messages from the queue
    */
-  private async tryFetchMessage() {
-    let currentConcurrent = await this.getTotalConcurrent();
-    if (currentConcurrent >= this.MAX_CONCURRENT) {
-      this.logger.debug(`Abort message due to exceed ${currentConcurrent}/${this.MAX_CONCURRENT} processes`);
-      return;
+  private async tryFetchOnIdle() {
+    for (let i = 0; i < QUEUE_MAXFETCH; i++) {
+      const message = await this.queue.receive();
+      if (!message) {
+        break;
+      }
+      this.rxObservableBuffer.next(message);
     }
+  }
 
-    const message = await this.queue.receive();
+  /**
+   * Attempt to either fetch one message from queue OR process the prefetched one
+   * @param prefetchedMessage Prefetched message from the queue
+   */
+  private async attempProcessMessage(prefetchedMessage?: QueueMessageDto) {
+    const message = (prefetchedMessage && prefetchedMessage.id) ? prefetchedMessage : (await this.queue.receive());
     if (message) {
       try {
-        await this.incTotalConcurrent();
-        this.logger.debug(`Executing worker for message ${message.message}, total ${currentConcurrent} concurrent processes `);
+        this.logger.debug(`Executing worker for message ${message.message}`);
         const executeResult = await this.onMesage(message);
         this.logger.debug(`Worker processed doc ${message.message} with status ${executeResult}`);
         if (executeResult === EMailInQueueProcessingStatus.Outdated || executeResult === EMailInQueueProcessingStatus.Success) {
@@ -87,29 +140,8 @@ export abstract class QueueConsumerBase implements OnModuleInit, OnModuleDestroy
         this.logger.error(`Unsuccessful processing message ${message.message} with error ${e.message}`, e.stack);
       }
       finally {
-        await this.decTotalConcurrent();
-        currentConcurrent = await this.getTotalConcurrent();
-        this.logger.debug(`Adjust concurrent process to ${currentConcurrent}`);
+        this.lastProcessOn = Date.now();
       }
     }
-  }
-
-  async onModuleInit() {
-    this.subcribeRedis = await newRedisConnection(this.configService, this.logger, this.queueName);
-    await this.subscribe();
-  }
-
-  onModuleDestroy() {
-    this.subcribeRedis.quit();
-  }
-
-  private subscribe() {
-    this.channelName = `${QUEUE_NAMESPACE}:rt:${this.queueName}`;
-    this.subcribeRedis.subscribe(this.channelName);
-    this.subcribeRedis.on('message', async (channel: string) => {
-      if (channel === this.channelName) {
-        await this.tryFetchMessage();
-      }
-    });
   }
 }
