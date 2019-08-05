@@ -69,7 +69,7 @@
     "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",
     "cover": "NODE_ENV=test jest --config ./jest-cover.json  --coverage --bail --forceExit",
     "cover:travis": "NODE_ENV=travis jest --config ./jest-cover.json  --coverage --bail --forceExit",
-    "test": "npm run lint && NODE_ENV=test jest",
+    "test": "npm run lint && NODE_ENV=test jest --forceExit",
     "test:e2e": "NODE_ENV=test jest --config ./jest-e2e.json --forceExit --bail",
     "test:watch": "NODE_ENV=test jest --watch",
     "start": "nodemon dist/app.js",

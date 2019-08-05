@@ -5,6 +5,15 @@ import { IConfiguration, ILoggerInstance, PROVIDERS, QUEUES, IOC_KEY } from '../
 
 @Injectable()
 export class DeadQueue extends QueueBase {
+  /**
+   * This queue does not need realtime
+   *
+   * @protected
+   * @type {boolean}
+   * @memberof MainQueue
+   */
+  protected realtime: boolean = false;
+
   constructor(
     protected readonly configService: IConfiguration,
     @Inject(PROVIDERS.ROOT_LOGGER)

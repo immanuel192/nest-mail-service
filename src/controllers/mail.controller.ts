@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Inject } from '@nestjs/common';
 import { ApiUseTags, ApiCreatedResponse, ApiBadRequestResponse, ApiOperation, ApiInternalServerErrorResponse } from '@nestjs/swagger';
-import { IMailService, IQueue } from '../services';
+import { IMailService, IQueueProducer } from '../services';
 import { SendMailRequestDto, SendMailResponseDto } from '../dto';
 import { QUEUES, ILoggerInstance, PROVIDERS } from '../commons';
 
@@ -9,7 +9,7 @@ import { QUEUES, ILoggerInstance, PROVIDERS } from '../commons';
 export default class MailController {
   constructor(
     @Inject(QUEUES.MAIN)
-    private readonly mainQueue: IQueue,
+    private readonly mainQueue: IQueueProducer,
     @Inject(PROVIDERS.ROOT_LOGGER)
     private readonly logger: ILoggerInstance,
     private readonly mailService: IMailService,

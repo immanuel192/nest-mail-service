@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ScheduleModule } from 'nest-schedule';
 import { MailRecoverJob } from '../services/jobs/mail.recover.job';
 import { MailModule } from './mail.module';
+import { MailSendingWorker } from '../services/workers/mail.sending.worker';
 
 @Module({
   imports: [
@@ -9,8 +10,8 @@ import { MailModule } from './mail.module';
     MailModule
   ],
   providers: [
-    MailRecoverJob
+    MailRecoverJob,
+    MailSendingWorker
   ]
 })
-export class WorkerModule {
-}
+export class WorkerModule { }

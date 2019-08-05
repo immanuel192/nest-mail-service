@@ -27,3 +27,20 @@ export const QUEUES = {
 export const JOB_IDS = {
   MAIL_RECOVERY: 'mail-recover'
 };
+
+export const QUEUE_NAMESPACE = 'rsmq';
+
+export const QUEUE_RETRY_CHECK = 5; // Retry pull this message from the queue again in 5s
+
+/**
+ * Maximum items to be fetched when idle
+ */
+export const QUEUE_MAXFETCH = 50;
+/**
+ * Maximum idle time for the queue consumer
+ */
+export const QUEUE_MAXIDLE = 1000 * 5;
+
+export enum EMailInQueueProcessingStatus {
+  Success, Retry, Outdated
+}

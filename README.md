@@ -26,9 +26,14 @@ How system works:
   - If fail, update message status together with the visibility to let it available again in the queue for next time retry
   - In case if can not retry at all after a configured number of retries, it will dispatch a message to `DeadLetter` queue for analysis and mark the email document as `Failed`
 - `Worker` will:
-  - Run every 1 hour
+  - Run every 30 mins
   - Try to scan any email documents that need to be enqueue again. This will be backup solution in case API did not dispatch message successfully.
   - Dispatch message to `main` queue
+
+
+![How Worker Fetch Enqueue Emails](./docs/how_worker_fetch_pending_emails.png)
+
+
 - We also have internal components to support exponential backoff and circuit breaker mechanism when selecting email provider
 
 ### App scaling

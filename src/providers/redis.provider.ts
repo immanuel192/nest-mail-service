@@ -9,7 +9,7 @@ import { IConfiguration, ILoggerInstance } from '../commons/interfaces';
 /**
  * Create new redis connection, wait until connection established
  */
-const newRedisConnection: (config: IConfiguration, logger: ILoggerInstance, name?: string) => Bluebird<Redis.Redis> = memoize((config: IConfiguration, logger: ILoggerInstance, connectionName?: string) => {
+export const newRedisConnection: (config: IConfiguration, logger: ILoggerInstance, name?: string) => Bluebird<Redis.Redis> = memoize((config: IConfiguration, logger: ILoggerInstance, connectionName?: string) => {
   return new Bluebird<Redis.Redis>((resolve) => {
     const { host, port, db, keyPrefix } = config.get('redis');
     const redis = new Redis({
@@ -28,7 +28,7 @@ const newRedisConnection: (config: IConfiguration, logger: ILoggerInstance, name
     });
     redis.on('ready', () => resolve(redis));
   }).timeout(6000, 'Redis unavailable');
-});
+}, (...args: any[]) => ((args.length === 3) ? args[2] : '') + '-redis');
 
 export const providerRedis: FactoryProvider = {
   provide: PROVIDERS.REDIS,

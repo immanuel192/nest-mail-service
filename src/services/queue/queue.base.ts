@@ -1,16 +1,21 @@
 import * as RSMQ from 'rsmq';
 import { OnModuleInit } from '@nestjs/common';
-import { IConfiguration, ILoggerInstance } from '../../commons';
+import { IConfiguration, ILoggerInstance, QUEUE_NAMESPACE } from '../../commons';
 import { QueueMessageDto } from '../../dto';
-import { IQueue } from './queue.base.interface';
+import { IQueueProducer, IQueueConsumer } from './queue.base.interface';
 
 /**
  * Base queue
  */
-export abstract class QueueBase implements IQueue, OnModuleInit {
+export abstract class QueueBase implements IQueueProducer, IQueueConsumer, OnModuleInit {
   protected abstract configService: IConfiguration;
   protected abstract logger: ILoggerInstance;
   protected connection: RSMQ;
+
+  /**
+   * Whether we will support realtime or not
+   */
+  protected realtime: boolean = false;
 
   constructor(
     private readonly queueName: string
@@ -22,7 +27,8 @@ export abstract class QueueBase implements IQueue, OnModuleInit {
     this.connection = new RSMQ({
       host: redisConfig.host,
       port: redisConfig.port,
-      realtime: false,
+      ns: QUEUE_NAMESPACE,
+      realtime: this.realtime,
       db: redisConfig.db
     } as any);
     const queues = await this.connection.listQueuesAsync();
