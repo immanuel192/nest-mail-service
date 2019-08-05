@@ -10,5 +10,13 @@
     "host": "localhost",
     "port": "6379",
     "db": 1
+  },
+  "jobs": {
+    "mail-recover": {
+      "enable": false,
+      "bufferTime": 1800,
+      "type": "cron",
+      "cron": "0 */30 * * *"
+    }
   }
 }

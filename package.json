@@ -19,6 +19,7 @@
     "lodash": "4.17.15",
     "mongodb": "2.2.30",
     "morgan": "1.9.1",
+    "nest-schedule": "0.6.3",
     "nodemon": "1.19.1",
     "reflect-metadata": "0.1.13",
     "response-time": "2.3.2",

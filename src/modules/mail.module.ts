@@ -11,6 +11,9 @@ import MailController from '../controllers/mail.controller';
   providers: [
     IMailCollection[IOC_KEY],
     MailService[IOC_KEY]
+  ],
+  exports: [
+    MailService[IOC_KEY]
   ]
 })
 export class MailModule {
