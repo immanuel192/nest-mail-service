@@ -27,3 +27,11 @@ export const QUEUES = {
 export const JOB_IDS = {
   MAIL_RECOVERY: 'mail-recover'
 };
+
+export const QUEUE_NAMESPACE = 'rsmq';
+
+export const QUEUE_RETRY_CHECK = 5; // Retry pull this message from the queue again in 5s
+
+export enum EMailInQueueProcessingStatus {
+  Success, Retry, Outdated
+}

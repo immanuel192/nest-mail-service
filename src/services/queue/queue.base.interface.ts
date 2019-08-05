@@ -3,7 +3,7 @@ import { QueueMessageDto } from '../../dto';
 /**
  * Queue interface for worker
  */
-export abstract class IQueueRetrieveOnly {
+export abstract class IQueueConsumer {
   /**
    * Fetch message from queue
    * @returns Message id
@@ -27,7 +27,7 @@ export abstract class IQueueRetrieveOnly {
 /**
  * Queue interface in general
  */
-export abstract class IQueue extends IQueueRetrieveOnly {
+export abstract class IQueueProducer {
   /**
    * Send message to queue.
    * @param message

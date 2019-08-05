@@ -5,7 +5,7 @@ import { JobAbstract } from './jobabstract';
 import { JOB_IDS, QUEUES } from '../../commons';
 import { IMailService } from '../mail.service.interface';
 import { MailDto } from '../../dto';
-import { IQueue } from '../queue/queue.base.interface';
+import { IQueueProducer } from '../queue/queue.base.interface';
 
 /**
  * Enqueue emails to queue in case anything failed
@@ -18,7 +18,7 @@ export class MailRecoverJob extends JobAbstract {
   constructor(
     private readonly mailService: IMailService,
     @Inject(QUEUES.MAIN)
-    private readonly mainQueue: IQueue
+    private readonly mainQueue: IQueueProducer
   ) {
     super();
   }

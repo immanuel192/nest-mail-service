@@ -4,7 +4,6 @@ jest.mock('rsmq', () => {
 });
 import { QueueBase } from './queue.base';
 import { configMock, loggerMock, when, randomString } from '../../commons/test-helper';
-import { IQueue } from './queue.base.interface';
 
 const config = configMock();
 const logger = loggerMock();
@@ -34,7 +33,7 @@ class FakeQueue extends QueueBase {
 }
 
 describe('/src/services/queue/queue.base.ts', () => {
-  let instance: IQueue;
+  let instance: FakeQueue;
 
   beforeAll(() => {
     instance = new FakeQueue();

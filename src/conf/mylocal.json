@@ -15,7 +15,7 @@
     "mail-recover": {
       "enable": true,
       "type": "timeout",
-      "timeout": 500
+      "timeout": 3000
     }
   }
 }
