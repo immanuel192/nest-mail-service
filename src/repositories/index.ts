@@ -8,6 +8,7 @@ import { MailModel } from '../models/mail.model';
  */
 abstract class Collection<TSchema>{
   abstract find<T = TSchema>(query?: Object): Cursor<T>;
+  abstract find<T = TSchema>(query: Object, options?: FindOneOptions): Cursor<T>;
   abstract findOne<T = TSchema>(filter: Object, callback: MongoCallback<T | null>): void;
   abstract findOne<T = TSchema>(filter: Object, options?: FindOneOptions): Promise<T | null>;
   abstract findOne<T = TSchema>(filter: Object, options: FindOneOptions, callback: MongoCallback<T | null>): void;

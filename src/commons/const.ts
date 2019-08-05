@@ -23,3 +23,7 @@ export const QUEUES = {
   MAIN: 'main',
   DEADLETTER: 'dead'
 };
+
+export const JOB_IDS = {
+  MAIL_RECOVERY: 'mail-recover'
+};

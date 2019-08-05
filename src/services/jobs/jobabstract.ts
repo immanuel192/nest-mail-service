@@ -19,7 +19,6 @@ export abstract class JobAbstract implements OnModuleInit {
     maxRetry: 5,
     retryInterval: 2000
   };
-  protected _config: IJobConfig;
   protected isRunning: boolean = false;
 
   @Inject(IConfiguration) protected readonly configService: IConfiguration;
@@ -51,7 +50,7 @@ export abstract class JobAbstract implements OnModuleInit {
       userConfig.startTime = new Date(userConfig.startTime);
       userConfig.endTime = new Date(userConfig.endTime);
     }
-    this._config = merge({
+    this.config = merge({
       startTime: null,
       endTime: null
     } as any, this.config, userConfig);
@@ -79,15 +78,15 @@ export abstract class JobAbstract implements OnModuleInit {
       }
     };
 
-    switch (this._config.type) {
+    switch (this.config.type) {
       case EJobType.cron:
-        Scheduler.scheduleCronJob(this.jobName, this._config.cron, executor, this._config, this.tryLock.bind(this));
+        Scheduler.scheduleCronJob(this.jobName, this.config.cron, executor, this.config, this.tryLock.bind(this));
         break;
       case EJobType.interval:
-        Scheduler.scheduleIntervalJob(this.jobName, this._config.interval, executor, this._config, this.tryLock.bind(this));
+        Scheduler.scheduleIntervalJob(this.jobName, this.config.interval, executor, this.config, this.tryLock.bind(this));
         break;
       case EJobType.timeout:
-        Scheduler.scheduleTimeoutJob(this.jobName, this._config.timeout, executor, this._config, this.tryLock.bind(this));
+        Scheduler.scheduleTimeoutJob(this.jobName, this.config.timeout, executor, this.config, this.tryLock.bind(this));
         break;
     }
   }

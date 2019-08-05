@@ -9,6 +9,13 @@ export function createMongoDbIndexes(db: IDatabaseInstance) {
             'status.type': 1
           },
           background: true
+        },
+        {
+          key: {
+            'status.0.type': 1,
+            sentOn: 1
+          },
+          background: true
         }
       ]);
     });

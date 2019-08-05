@@ -44,4 +44,40 @@ export class MailService implements IMailService {
     const insertResult = await this.repoMail.insertOne(newMailObj);
     return this.repoMail.findOne({ _id: insertResult.insertedId });
   }
+
+  fetchPendingMails(
+    inp: { fromId?: ObjectId, limit?: number, bufferTime?: number } = {})
+    : Promise<MailDto[]> {
+    const query: any = {
+      'status.0.type': {
+        $nin: [EMailSendingStatus.Success, EMailSendingStatus.Fail]
+      }
+    };
+
+    const options: any = {
+      sort: {
+        id: 1
+      },
+      projection: {
+        _id: 1
+      },
+      limit: (inp.limit > 0 ? inp.limit : 0) || 100
+    };
+
+    if (inp.fromId) {
+      query._id = {
+        $gt: inp.fromId
+      };
+    }
+
+    if (inp.bufferTime > 0) {
+      query.sentOn = {
+        $lt: new Date(Date.now() - inp.bufferTime * 1000)
+      };
+    }
+
+    return this.repoMail
+      .find(query, options)
+      .toArray();
+  }
 }

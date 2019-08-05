@@ -4,11 +4,13 @@ import { MwGracefulShutdown, MwRequestLogger } from '../middlewares';
 import { IDatabaseInstance } from '../commons';
 import { createMongoDbIndexes } from '../commons/mongoIndexes';
 import { MailModule } from './mail.module';
+import { WorkerModule } from './worker.module';
 
 @Module({
   imports: [
     GlobalModule.forRoot(),
-    MailModule
+    MailModule,
+    WorkerModule
   ]
 })
 export class AppModule implements NestModule, OnModuleInit {

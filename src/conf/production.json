@@ -10,5 +10,10 @@
     "host": "redis",
     "port": "6379",
     "db": 2
+  },
+  "jobs": {
+    "mail-recover": {
+      "enable": true
+    }
   }
 }

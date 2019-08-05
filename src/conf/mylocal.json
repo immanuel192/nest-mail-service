@@ -10,5 +10,12 @@
     "host": "localhost",
     "port": "6380",
     "db": 1
+  },
+  "jobs": {
+    "mail-recover": {
+      "enable": true,
+      "type": "timeout",
+      "timeout": 500
+    }
   }
 }

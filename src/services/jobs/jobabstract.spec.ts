@@ -23,7 +23,15 @@ class TestJob extends JobAbstract {
   }
 
   getConfig() {
-    return this._config;
+    return this.config;
+  }
+
+  resetConfig() {
+    this.config = {
+      type: EJobType.timeout,
+      maxRetry: 5,
+      retryInterval: 2000
+    };
   }
 
   getJobName() {
@@ -45,6 +53,9 @@ describe('/src/jobs/jobabstract.ts', () => {
   beforeAll(() => {
     instance = new TestJob();
     instance.setLogger(logger);
+  });
+  beforeEach(() => {
+    instance.resetConfig();
   });
   afterAll(() => {
     jest.restoreAllMocks();
