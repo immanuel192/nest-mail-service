@@ -18,5 +18,28 @@
       "type": "cron",
       "cron": "0 */30 * * *"
     }
+  },
+  "mails": {
+    "sendgrid": {
+      "authKey": "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",
+      "from": "trungdt@absoft.vn",
+      "maxRetries": 3,
+      "circuit": {
+        "timeout": 6000,
+        "errorThresholdPercentage": 50,
+        "resetTimeout": 30000
+      }
+    },
+    "mailgun": {
+      "domain": "sandboxa03d17bc7b834b69b04dad25109268e9.mailgun.org",
+      "apiKey": "81cee528392eac49fc8201ec6d9e4188-73ae490d-20d566c0",
+      "from": "postmaster@sandboxa03d17bc7b834b69b04dad25109268e9.mailgun.org",
+      "maxRetries": 3,
+      "circuit": {
+        "timeout": 6000,
+        "errorThresholdPercentage": 50,
+        "resetTimeout": 30000
+      }
+    }
   }
 }

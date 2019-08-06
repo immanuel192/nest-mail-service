@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 import { IOC_KEY, EMailStatus } from '../commons';
 import { IMailService } from './mail.service.interface';
 import { IMailCollection } from '../repositories';
-import { InsertMailInfoDto, MailDto } from '../dto';
+import { InsertMailInfoDto, MailDto, MailStatusDto } from '../dto';
 import { MailModel } from '../models/mail.model';
 
 /**
@@ -79,5 +79,38 @@ export class MailService implements IMailService {
     return this.repoMail
       .find(query, options)
       .toArray();
+  }
+
+  async updateMailStatus(id: string | ObjectId, status: MailStatusDto): Promise<boolean> {
+    const mailId = (id instanceof ObjectId) ? id : new ObjectId(id);
+    const result = await this.repoMail.updateOne(
+      {
+        _id: mailId
+      },
+      {
+        $set:
+        {
+          'status.0': status
+        }
+      });
+    return result.result.ok === 1;
+  }
+
+  async addMailStatus(id: string | ObjectId, status: MailStatusDto): Promise<boolean> {
+    const mailId = (id instanceof ObjectId) ? id : new ObjectId(id);
+    const result = await this.repoMail.updateOne(
+      {
+        _id: mailId
+      },
+      {
+        $push:
+        {
+          status: {
+            $each: [status],
+            $position: 0
+          }
+        }
+      });
+    return result.result.ok === 1;
   }
 }

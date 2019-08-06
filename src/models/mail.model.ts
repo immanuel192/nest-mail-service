@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { EMailStatus } from '../commons/const';
+import { MailStatusDto } from '../dto';
 
 export interface MailModel {
   _id?: ObjectId;
@@ -8,7 +8,7 @@ export interface MailModel {
   bcc: string[];
   title: string;
   content: string;
-  status: { [k: string]: any; type: EMailStatus; }[];
+  status: MailStatusDto[];
 
   /**
    * Actual send on date, when user created this email

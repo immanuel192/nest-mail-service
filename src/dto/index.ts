@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+import { EMailStatus } from '../commons';
 export * from './mail.controller.dto';
 export * from './queue.dto';
 
@@ -45,4 +46,17 @@ export interface AttemptMailSendingDto {
   bcc: string[];
   title: string;
   content: string;
+}
+
+export interface MailStatusDto {
+  [k: string]: any;
+  /**
+   * How many times has been retry
+   */
+  retries?: number;
+  /**
+   * MTA name of previous try, only available in type Attempt
+   */
+  mta?: string;
+  type: EMailStatus;
 }

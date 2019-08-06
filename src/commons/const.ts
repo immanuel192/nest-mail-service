@@ -42,5 +42,5 @@ export const QUEUE_MAXFETCH = 50;
 export const QUEUE_MAXIDLE = 1000 * 5;
 
 export enum EMailProcessingStatus {
-  Success, Retry, Outdated
+  Success = 'Success', Retry = 'Retry', Outdated = 'Outdated'
 }
