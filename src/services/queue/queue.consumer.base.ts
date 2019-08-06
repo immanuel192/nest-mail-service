@@ -4,7 +4,7 @@ import { Redis } from 'ioredis';
 import { Subject, timer, Observable } from 'rxjs';
 import { bufferTime } from 'rxjs/operators';
 import { IQueueConsumer } from './queue.base.interface';
-import { IConfiguration, ILoggerInstance, PROVIDERS, QUEUE_NAMESPACE, EMailInQueueProcessingStatus, QUEUE_RETRY_CHECK, QUEUE_MAXIDLE, QUEUE_MAXFETCH } from '../../commons';
+import { IConfiguration, ILoggerInstance, PROVIDERS, QUEUE_NAMESPACE, EMailProcessingStatus, QUEUE_RETRY_CHECK, QUEUE_MAXIDLE, QUEUE_MAXFETCH } from '../../commons';
 import { newRedisConnection } from '../../providers/redis.provider';
 import { QueueMessageDto } from '../../dto';
 
@@ -58,10 +58,14 @@ export abstract class QueueConsumerBase implements OnModuleInit, OnModuleDestroy
 
   /**
    * Try to process the message
+   *
+   * Possible return cases:
+   * - `EMailInQueueProcessingStatus.Success`: Message will be deleted
+   * - `EMailInQueueProcessingStatus.Retry`: Message will be putted back to the queue for next retry
+   * - `EMailInQueueProcessingStatus.Outdated`: No need to do anything, message will be deleted. Usually because the item has been processed while message still in the queue
    * @param message
-   * @returns Return true to delete the message. Any exception or not return anything will return the message back to the queue
    */
-  abstract onMesage(message: QueueMessageDto): Promise<EMailInQueueProcessingStatus>;
+  abstract onMesage(message: QueueMessageDto): Promise<EMailProcessingStatus>;
 
   async onModuleInit() {
     this.subcribeRedis = await newRedisConnection(this.configService, this.logger, this.queueName);
@@ -128,11 +132,11 @@ export abstract class QueueConsumerBase implements OnModuleInit, OnModuleDestroy
         this.logger.debug(`Executing worker for message ${message.message}`);
         const executeResult = await this.onMesage(message);
         this.logger.debug(`Worker processed doc ${message.message} with status ${executeResult}`);
-        if (executeResult === EMailInQueueProcessingStatus.Outdated || executeResult === EMailInQueueProcessingStatus.Success) {
+        if (executeResult === EMailProcessingStatus.Outdated || executeResult === EMailProcessingStatus.Success) {
           await this.queue.delete(message.id);
         }
 
-        if (executeResult === EMailInQueueProcessingStatus.Retry) {
+        if (executeResult === EMailProcessingStatus.Retry) {
           await this.queue.updateVisibility(message.id, QUEUE_RETRY_CHECK);
         }
       }

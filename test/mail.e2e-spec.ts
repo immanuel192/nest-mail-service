@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as _ from 'lodash';
 import { NoopLogger, randomString } from '../src/commons/test-helper';
-import { PROVIDERS, EMailSendingStatus } from '../src/commons';
+import { PROVIDERS, EMailStatus } from '../src/commons';
 import { MailModule } from '../src/modules/mail.module';
 import { GlobalModule } from '../src/modules/global.module';
 import { IMailService } from '../src/services';
@@ -379,7 +379,7 @@ describe('/test/mail.e2e-spec.ts', () => {
               title: inp.title,
               content: inp.content,
               status: [
-                { type: EMailSendingStatus.Init }
+                { type: EMailStatus.Init }
               ],
               sentOn: expect.any(Date)
             });

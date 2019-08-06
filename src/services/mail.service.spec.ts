@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 import { MailService } from './mail.service';
 import { IMailService } from './mail.service.interface';
 import { collectionMock, randomString, when } from '../commons/test-helper';
-import { IOC_KEY, EMailSendingStatus } from '../commons';
+import { IOC_KEY, EMailStatus } from '../commons';
 import { InsertMailInfoDto } from '../dto';
 
 const mailCol = collectionMock();
@@ -53,7 +53,7 @@ describe('/src/services/mail.service.ts', () => {
         content: inp.content,
         status: [
           {
-            type: EMailSendingStatus.Init
+            type: EMailStatus.Init
           }
         ],
         sentOn: expect.any(Date)
@@ -80,7 +80,7 @@ describe('/src/services/mail.service.ts', () => {
   describe('fetchPendingMails', () => {
     const baseQuery = {
       'status.0.type': {
-        $nin: [EMailSendingStatus.Success, EMailSendingStatus.Fail]
+        $nin: [EMailStatus.Success, EMailStatus.Fail]
       }
     };
     const baseOptions = {

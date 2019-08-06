@@ -8,6 +8,7 @@ export interface INumberStringMap extends INumberTMap<string> { }
 
 export interface IStringNumberMap extends IStringTMap<number> { }
 export interface INumberNumberMap extends INumberTMap<number> { }
+export interface IStringAnyMap extends IStringTMap<any> { }
 
 export interface IStringBooleanMap extends IStringTMap<boolean> { }
 export interface INumberBooleanMap extends INumberTMap<boolean> { }

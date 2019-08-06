@@ -35,3 +35,14 @@ export interface MailDto {
    */
   deliveriedDate?: Date;
 }
+
+/**
+ * An DTO to describe a mail when attempt to be sent
+ */
+export interface AttemptMailSendingDto {
+  to: string[];
+  cc: string[];
+  bcc: string[];
+  title: string;
+  content: string;
+}

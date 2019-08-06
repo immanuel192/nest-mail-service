@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ClassProvider } from '@nestjs/common/interfaces';
 import { ObjectId } from 'mongodb';
-import { IOC_KEY, EMailSendingStatus } from '../commons';
+import { IOC_KEY, EMailStatus } from '../commons';
 import { IMailService } from './mail.service.interface';
 import { IMailCollection } from '../repositories';
 import { InsertMailInfoDto, MailDto } from '../dto';
@@ -36,7 +36,7 @@ export class MailService implements IMailService {
       content: mail.content,
       status: [
         {
-          type: EMailSendingStatus.Init
+          type: EMailStatus.Init
         }
       ],
       sentOn: new Date()
@@ -50,7 +50,7 @@ export class MailService implements IMailService {
     : Promise<MailDto[]> {
     const query: any = {
       'status.0.type': {
-        $nin: [EMailSendingStatus.Success, EMailSendingStatus.Fail]
+        $nin: [EMailStatus.Success, EMailStatus.Fail]
       }
     };
 
