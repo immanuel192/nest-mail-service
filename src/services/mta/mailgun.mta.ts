@@ -60,8 +60,6 @@ export class MailGunMTA extends MTABase {
     const data: any = {
       from: this.defaultConfig.from,
       to: mail.to,
-      // cc: mail.cc || [],
-      // bcc: mail.bcc || [],
       subject: mail.title,
       text: mail.content
     };
