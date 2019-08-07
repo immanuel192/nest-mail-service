@@ -45,7 +45,6 @@ export class MailGunMTA extends MTABase {
 
   protected async prepareRequestConfig(request: SuperAgentRequest) {
     request.timeout(this.timeout);
-    request.accept('application/json');
     request.set('Content-Type', 'application/x-www-form-urlencoded');
   }
 
@@ -58,13 +57,20 @@ export class MailGunMTA extends MTABase {
     -F subject='Hello' \
     -F text='Testing some Mailgun awesomeness!'
      */
-    request.field({
+    const data: any = {
       from: this.defaultConfig.from,
       to: mail.to,
-      cc: mail.cc || [],
-      bcc: mail.bcc || [],
+      // cc: mail.cc || [],
+      // bcc: mail.bcc || [],
       subject: mail.title,
       text: mail.content
-    });
+    };
+    if (mail.cc && mail.cc.length > 0) {
+      data.cc = mail.cc;
+    }
+    if (mail.bcc && mail.cc.length > 0) {
+      data.bcc = mail.bcc;
+    }
+    request.field(data);
   }
 }

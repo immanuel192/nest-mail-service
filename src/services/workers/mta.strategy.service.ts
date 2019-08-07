@@ -33,7 +33,6 @@ export class MTAStategyService implements IMTAStategyService, OnModuleInit {
 
   async getMTA(lastStatus: MailStatusDto): Promise<IMailTransferAgent> {
     // prefer to retry with the previous mta
-    debugger;
     if (lastStatus.type === EMailStatus.Attempt) {
       const previousMTAInstance = this.availableMTA.find(t => t.name === lastStatus.mta && t.isAvailable);
       if (previousMTAInstance

@@ -125,7 +125,7 @@ export abstract class MTABase extends IMailTransferAgent {
         return EMailProcessingStatus.Retry;
       })
       .catch((e) => {
-        this.logger.error(`${this.name} - Error while sending email - ${e.message}`, e.stack);
+        this.logger.error(`${this.name} - Error while sending email - ${e.message} - ${JSON.stringify(get(e, 'response.body', {}))}`, e.stack);
         return Promise.reject(e);
       });
   }

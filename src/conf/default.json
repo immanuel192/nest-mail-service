@@ -31,9 +31,9 @@
       }
     },
     "mailgun": {
-      "domain": "sandboxa03d17bc7b834b69b04dad25109268e9.mailgun.org",
-      "apiKey": "81cee528392eac49fc8201ec6d9e4188-73ae490d-20d566c0",
-      "from": "postmaster@sandboxa03d17bc7b834b69b04dad25109268e9.mailgun.org",
+      "domain": "sandbox8aa1bf5250504af59ef5fe1a9582f0f2.mailgun.org",
+      "apiKey": "0342938a78974f52446a4af5c4924dd1-73ae490d-52e521f2",
+      "from": "postmaster@sandbox8aa1bf5250504af59ef5fe1a9582f0f2.mailgun.org",
       "maxRetries": 3,
       "circuit": {
         "timeout": 6000,

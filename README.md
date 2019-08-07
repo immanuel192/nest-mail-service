@@ -52,6 +52,7 @@ How system works:
 - For the `Worker`, acquire mutex lock before executed to prevent other `Worker` instance to run while it running
 - Data sharding to improve write performance.
 - Switch to use Lambda
+- Apply mutex lock to guarantee that only one message that will be processed at a time without affect performance
    
 ## Versioning
 We use `semantic-release` to generate release notes. This make use of [conventional commit structure](https://www.conventionalcommits.org/en/v1.0.0-beta.4/) for both the notes and release numbers.
