@@ -40,10 +40,19 @@ How system works:
 - All the endpoints are very light load. Can scale easily.
 - To clear the queue faster, we can increase the number of `Email Sender Worker` instances.
 
+### App components
+![Components](./docs/modules.png)
+- Currently `App Module` and `Worker Module` are all loaded in `app.ts` but we can easily separate it into worker and service to run separately
+
+### Interesting features
+- Smart Mail Transfer Agent Stategy
+- Circuit Breaker for Selecting Mail Transfer Agent
+
 ### Things that can be improved
 - For the `Worker`, acquire mutex lock before executed to prevent other `Worker` instance to run while it running
 - Data sharding to improve write performance.
 - Switch to use Lambda
+- Apply mutex lock to guarantee that only one message that will be processed at a time without affect performance
    
 ## Versioning
 We use `semantic-release` to generate release notes. This make use of [conventional commit structure](https://www.conventionalcommits.org/en/v1.0.0-beta.4/) for both the notes and release numbers.

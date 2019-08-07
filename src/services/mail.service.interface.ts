@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { InsertMailInfoDto, MailDto } from '../dto';
+import { InsertMailInfoDto, MailDto, MailStatusDto } from '../dto';
 
 export abstract class IMailService {
   /**
@@ -23,4 +23,18 @@ export abstract class IMailService {
   abstract fetchPendingMails(
     inp?: { fromId?: ObjectId, limit?: number, bufferTime?: number })
     : Promise<MailDto[]>;
+
+  /**
+   * Update mail status
+   * @param id
+   * @param status
+   */
+  abstract updateMailStatus(id: ObjectId | string, status: MailStatusDto): Promise<boolean>;
+
+  /**
+   * Add new mail status
+   * @param id
+   * @param status
+   */
+  abstract addMailStatus(id: ObjectId | string, status: MailStatusDto): Promise<boolean>;
 }

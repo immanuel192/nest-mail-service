@@ -33,7 +33,10 @@ export abstract class QueueBase implements IQueueProducer, IQueueConsumer, OnMod
     } as any);
     const queues = await this.connection.listQueuesAsync();
     if (!queues.includes(this.queueName)) {
-      const result = await this.connection.createQueueAsync({ qname: this.queueName });
+      const result = await this.connection.createQueueAsync({
+        qname: this.queueName,
+        vt: 20
+      });
       if (result !== 1) {
         throw new Error(`Creating queue ${this.queueName} unsuccessful`);
       }

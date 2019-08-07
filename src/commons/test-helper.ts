@@ -71,7 +71,8 @@ export const collectionMock = () => {
     insertOne: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
-    toArray: jest.fn()
+    toArray: jest.fn(),
+    updateOne: jest.fn()
   };
 };
 

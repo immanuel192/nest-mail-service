@@ -1,10 +1,10 @@
 import * as redisProvider from '../../providers/redis.provider';
 import { QueueConsumerBase } from './queue.consumer.base';
-import { EMailInQueueProcessingStatus, QUEUE_NAMESPACE, QUEUE_RETRY_CHECK } from '../../commons';
+import { EMailProcessingStatus, QUEUE_NAMESPACE, QUEUE_RETRY_CHECK } from '../../commons';
 import { loggerMock, configMock, when } from '../../commons/test-helper';
 
 class FakeWorker extends QueueConsumerBase {
-  onMesage(): Promise<EMailInQueueProcessingStatus> {
+  onMesage(): Promise<EMailProcessingStatus> {
     return Promise.resolve(null);
   }
 
@@ -110,16 +110,16 @@ describe('/src/services/queue/queue.consumer.base.ts', () => {
 
     it('should delete message from queue when successfull', async () => {
       const message = { id: 123, message: 'my message' };
-      mockOnMessage.mockResolvedValue(EMailInQueueProcessingStatus.Success);
+      mockOnMessage.mockResolvedValue(EMailProcessingStatus.Success);
 
       await (instance as any).attempProcessMessage(message);
-      expect(logger.debug).toBeCalledWith(`Worker processed doc ${message.message} with status ${EMailInQueueProcessingStatus.Success}`);
+      expect(logger.debug).toBeCalledWith(`Worker processed doc ${message.message} with status ${EMailProcessingStatus.Success}`);
       expect(queueMock.delete).toBeCalledWith(message.id);
     });
 
     it('should retry message from queue if any', async () => {
       const message = { id: 123, message: 'my message' };
-      mockOnMessage.mockResolvedValue(EMailInQueueProcessingStatus.Retry);
+      mockOnMessage.mockResolvedValue(EMailProcessingStatus.Retry);
 
       await (instance as any).attempProcessMessage(message);
       expect(queueMock.delete).not.toBeCalled();

@@ -5,7 +5,7 @@ export const PROVIDERS = {
   REDIS: 'redis'
 };
 
-export enum EMailSendingStatus {
+export enum EMailStatus {
   /** Just insert mail document */
   Init = 'init',
 
@@ -41,6 +41,6 @@ export const QUEUE_MAXFETCH = 50;
  */
 export const QUEUE_MAXIDLE = 1000 * 5;
 
-export enum EMailInQueueProcessingStatus {
-  Success, Retry, Outdated
+export enum EMailProcessingStatus {
+  Success = 'Success', Retry = 'Retry', Outdated = 'Outdated'
 }

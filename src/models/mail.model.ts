@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+import { MailStatusDto } from '../dto';
 
 export interface MailModel {
   _id?: ObjectId;
@@ -7,7 +8,7 @@ export interface MailModel {
   bcc: string[];
   title: string;
   content: string;
-  status: any[];
+  status: MailStatusDto[];
 
   /**
    * Actual send on date, when user created this email

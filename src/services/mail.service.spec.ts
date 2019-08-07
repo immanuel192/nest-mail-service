@@ -2,8 +2,8 @@ import { ObjectId } from 'mongodb';
 import { MailService } from './mail.service';
 import { IMailService } from './mail.service.interface';
 import { collectionMock, randomString, when } from '../commons/test-helper';
-import { IOC_KEY, EMailSendingStatus } from '../commons';
-import { InsertMailInfoDto } from '../dto';
+import { IOC_KEY, EMailStatus } from '../commons';
+import { InsertMailInfoDto, MailStatusDto } from '../dto';
 
 const mailCol = collectionMock();
 
@@ -53,7 +53,7 @@ describe('/src/services/mail.service.ts', () => {
         content: inp.content,
         status: [
           {
-            type: EMailSendingStatus.Init
+            type: EMailStatus.Init
           }
         ],
         sentOn: expect.any(Date)
@@ -80,7 +80,7 @@ describe('/src/services/mail.service.ts', () => {
   describe('fetchPendingMails', () => {
     const baseQuery = {
       'status.0.type': {
-        $nin: [EMailSendingStatus.Success, EMailSendingStatus.Fail]
+        $nin: [EMailStatus.Success, EMailStatus.Fail]
       }
     };
     const baseOptions = {
@@ -158,6 +158,91 @@ describe('/src/services/mail.service.ts', () => {
       const fistCallArgs = mailCol.find.mock.calls[0][0].sentOn['$lt'];
       expect(Math.abs(compareTime.getTime() - fistCallArgs.getTime())).toBeLessThanOrEqual(1000); // should be within 1s in diff
     });
+  });
 
+  describe('updateMailStatus', () => {
+    it('should update mail status if provide objectid string', async () => {
+      const id = '5d4a0bbb36a94547a743dcd5';
+      const status: MailStatusDto = {
+        type: EMailStatus.Success
+      };
+      mailCol.updateOne.mockResolvedValue({ result: { ok: 1 } });
+
+      const res = await instance.updateMailStatus(id, status);
+      expect(res).toEqual(true);
+      expect(mailCol.updateOne).toHaveBeenCalledTimes(1);
+      expect(mailCol.updateOne).toBeCalledWith({ _id: new ObjectId(id) },
+        {
+          $set:
+          {
+            'status.0': status
+          }
+        });
+    });
+
+    it('should update mail status if provide objectid', async () => {
+      const id = new ObjectId('5d4a0bbb36a94547a743dcd5');
+      const status: MailStatusDto = {
+        type: EMailStatus.Success
+      };
+      mailCol.updateOne.mockResolvedValue({ result: { ok: 1 } });
+
+      const res = await instance.updateMailStatus(id, status);
+      expect(res).toEqual(true);
+      expect(mailCol.updateOne).toHaveBeenCalledTimes(1);
+      expect(mailCol.updateOne).toBeCalledWith({ _id: new ObjectId(id) },
+        {
+          $set:
+          {
+            'status.0': status
+          }
+        });
+    });
+  });
+
+  describe('addMailStatus', () => {
+    it('should add new mail status if provide objectid string', async () => {
+      const id = '5d4a0bbb36a94547a743dcd5';
+      const status: MailStatusDto = {
+        type: EMailStatus.Success
+      };
+      mailCol.updateOne.mockResolvedValue({ result: { ok: 1 } });
+
+      const res = await instance.addMailStatus(id, status);
+      expect(res).toEqual(true);
+      expect(mailCol.updateOne).toHaveBeenCalledTimes(1);
+      expect(mailCol.updateOne).toBeCalledWith({ _id: new ObjectId(id) },
+        {
+          $push:
+          {
+            status: {
+              $each: [status],
+              $position: 0
+            }
+          }
+        });
+    });
+
+    it('should add new mail status if provide objectid', async () => {
+      const id = new ObjectId('5d4a0bbb36a94547a743dcd5');
+      const status: MailStatusDto = {
+        type: EMailStatus.Success
+      };
+      mailCol.updateOne.mockResolvedValue({ result: { ok: 1 } });
+
+      const res = await instance.addMailStatus(id, status);
+      expect(res).toEqual(true);
+      expect(mailCol.updateOne).toHaveBeenCalledTimes(1);
+      expect(mailCol.updateOne).toBeCalledWith({ _id: new ObjectId(id) },
+        {
+          $push:
+          {
+            status: {
+              $each: [status],
+              $position: 0
+            }
+          }
+        });
+    });
   });
 });

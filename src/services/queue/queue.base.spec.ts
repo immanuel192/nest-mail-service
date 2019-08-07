@@ -54,7 +54,7 @@ describe('/src/services/queue/queue.base.ts', () => {
   describe('onModuleInit', () => {
     it('should create queue if not exist', async () => {
       rsmqMock.listQueuesAsync.mockResolvedValue(['test', randomString()]);
-      when(rsmqMock.createQueueAsync).calledWith({ qname: QUEUE_NAME }).mockResolvedValue(1);
+      when(rsmqMock.createQueueAsync).calledWith({ qname: QUEUE_NAME, vt: 20 }).mockResolvedValue(1);
 
       await (instance as any).onModuleInit();
       expect(logger.debug).toBeCalledWith(`Init queue ${QUEUE_NAME}`);
