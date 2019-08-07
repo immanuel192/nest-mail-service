@@ -23,8 +23,10 @@ export class SendMailRequestDto {
   @ApiModelProperty({
     required: true,
     description: 'Receiver addresses',
-    example: 'trungdt@absoft.vn, testmail@gmail.com',
-    minLength: 1
+    example: ['test@gmail.com'],
+    isArray: true,
+    minLength: 1,
+    type: String
   })
   @IsArray()
   @IsString({ each: true })
@@ -34,8 +36,10 @@ export class SendMailRequestDto {
   @ApiModelProperty({
     required: false,
     description: 'CC addresses',
-    example: 'trungdt@absoft.vn, testmail@gmail.com',
-    minLength: 1
+    example: ['test@gmail.com'],
+    isArray: true,
+    minLength: 1,
+    type: String
   })
   @IsOptional()
   @IsArray()
@@ -46,8 +50,10 @@ export class SendMailRequestDto {
   @ApiModelProperty({
     required: false,
     description: 'BCC addresses',
-    example: 'trungdt@absoft.vn, testmail@gmail.com',
-    minLength: 1
+    example: ['test@gmail.com'],
+    isArray: true,
+    minLength: 1,
+    type: String
   })
   @IsOptional()
   @IsArray()
