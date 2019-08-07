@@ -1,3 +1,23 @@
+# [1.1.0](https://github.com/immanuel192/nest-mail-service/compare/v1.0.0...v1.1.0) (2019-08-07)
+
+
+### Bug Fixes
+
+* correct docker file that no need to remove local.josn anymore ([5fc6e41](https://github.com/immanuel192/nest-mail-service/commit/5fc6e41))
+* enable production mail-recover job ([bbfe116](https://github.com/immanuel192/nest-mail-service/commit/bbfe116))
+
+
+### Code Refactoring
+
+* refactor enum of email sending status ([7a5a041](https://github.com/immanuel192/nest-mail-service/commit/7a5a041))
+* update queue produer and consumer ([a7ea93e](https://github.com/immanuel192/nest-mail-service/commit/a7ea93e))
+
+
+### Features
+
+* add mail MTA, and stategy ([3f24ddf](https://github.com/immanuel192/nest-mail-service/commit/3f24ddf))
+* add queue consumer base and mail sending worker ([6a1a8b4](https://github.com/immanuel192/nest-mail-service/commit/6a1a8b4))
+
 # 1.0.0 (2019-08-05)
 
 
