@@ -13,10 +13,7 @@
   },
   "jobs": {
     "mail-recover": {
-      "enable": true,
-      "bufferTime": 1800,
-      "type": "cron",
-      "cron": "0 */30 * * *"
+      "enable": true
     }
   }
 }
