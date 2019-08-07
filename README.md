@@ -59,10 +59,14 @@ We use `semantic-release` to generate release notes. This make use of [conventio
 
 
 ### Setup your working environment:
-- Available tasks
+#### Quick start
+- Update `mails` config section in `default.json` config to use your own keys
+- docker-compose up -d
+
+#### Available tasks
 ```sh
 npm install
-docker-compose up -d  # to start the app by docker, including mongodb container
+docker-compose up -d  # to start the app by docker, including mongodb container. This will build and use `production` config
 npm run start:local # to start app in your local machine, that will connect to docker mongodb container
 npm run start:local:watch # to start app and watch for any changes
 npm run test # to run unit test
@@ -100,7 +104,7 @@ docker-compose up -d
 There is swagger integrated to help you easier navigate through all exposed restful api. Please follow:
 ```sh
 npm run start
-open http://localhost:9001/api/
+open http://localhost:9001/docs/
 ```
 
 ### Release Production:
