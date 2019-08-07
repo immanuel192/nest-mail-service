@@ -1,3 +1,5 @@
+## [1.1.1](https://github.com/immanuel192/nest-mail-service/compare/v1.1.0...v1.1.1) (2019-08-07)
+
 # [1.1.0](https://github.com/immanuel192/nest-mail-service/compare/v1.0.0...v1.1.0) (2019-08-07)
 
 
