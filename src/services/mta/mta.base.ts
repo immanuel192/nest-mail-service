@@ -58,7 +58,7 @@ export abstract class MTABase extends IMailTransferAgent {
     };
 
     this.config = get(this.configService.get('mails'), this.configName);
-    const options = merge({}, get(this.config, 'circuit', {}), defaultOptions);
+    const options = merge({}, defaultOptions, get(this.config, 'circuit', {}));
 
     this.circuit = circuitBreaker(this.attemptSendMail.bind(this), options);
     // when open
