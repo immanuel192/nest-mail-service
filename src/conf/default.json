@@ -16,7 +16,7 @@
       "enable": false,
       "bufferTime": 1800,
       "type": "cron",
-      "cron": "0 */30 * * *"
+      "cron": "*/30 * * * *"
     }
   },
   "mails": {
